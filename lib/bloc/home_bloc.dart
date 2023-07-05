@@ -7,7 +7,6 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 import '../models/home_product_data.dart';
-import '../utils/geocery_data.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';

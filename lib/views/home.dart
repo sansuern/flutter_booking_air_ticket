@@ -3,6 +3,7 @@ import 'package:basicflutter/utils/info_list.dart';
 import 'package:basicflutter/widgets/double_text_widget.dart';
 import 'package:basicflutter/widgets/hotels_card.dart';
 import 'package:basicflutter/widgets/ticket_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -22,6 +23,12 @@ class _HomeState extends State<Home> {
     // WebapiService().feed();
   }
 
+  final user = FirebaseAuth.instance.currentUser;
+
+  void SignUserOut() {
+    FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -38,12 +45,12 @@ class _HomeState extends State<Home> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Good Morning",
+                        "Good Morning ${user!.email!}",
                         style: Styles.headLineStyle3,
                       ),
                       const Gap(5),
                       Text(
-                        "Book Ticketss",
+                        "Book Tickets",
                         style: Styles.headLineStyle1,
                       ),
                     ],
@@ -74,9 +81,14 @@ class _HomeState extends State<Home> {
                       FluentSystemIcons.ic_fluent_search_regular,
                       color: Colors.grey.shade500,
                     ),
-                    Text(
-                      "Search",
-                      style: Styles.headLineStyle4,
+                    InkWell(
+                      onTap: () {
+                        SignUserOut();
+                      },
+                      child: Text(
+                        "Search",
+                        style: Styles.headLineStyle4,
+                      ),
                     )
                   ],
                 ),
