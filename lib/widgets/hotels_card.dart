@@ -1,10 +1,15 @@
+import 'package:basicflutter/bloc/cart_bloc.dart';
 import 'package:basicflutter/utils/layout.dart';
 import 'package:basicflutter/styles/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
+import '../models/cart.dart';
+import '../models/user.dart';
+
 class HotelCard extends StatelessWidget {
-  final Map<String, dynamic> hotel;
+  final hotel;
 
   const HotelCard({Key? key, required this.hotel}) : super(key: key);
 
@@ -13,7 +18,7 @@ class HotelCard extends StatelessWidget {
     final size = AppLayout.getSize(context);
     return Container(
       width: size.width * 0.6,
-      height: AppLayout.getHeight(350),
+      height: AppLayout.getHeight(375),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 17),
       margin: const EdgeInsets.only(right: 17, top: 5),
       decoration: BoxDecoration(
@@ -55,6 +60,26 @@ class HotelCard extends StatelessWidget {
           Text(
             "\$${hotel['price']}/night",
             style: Styles.headLineStyle1.copyWith(color: Styles.kakiColor),
+          ),
+          const Gap(8),
+          Row(
+            children: [
+              ElevatedButton(
+                  style:
+                      TextButton.styleFrom(backgroundColor: Styles.orangeColor),
+                  onPressed: () => context.read<CartBloc>().add(
+                        CartAdd(
+                          CartModel(
+                            id: hotel['id'],
+                            image: hotel['image'],
+                            destination: hotel['destination'],
+                            place: hotel['place'],
+                            price: hotel['price'],
+                          ),
+                        ),
+                      ),
+                  child: const Text("Booking"))
+            ],
           ),
         ],
       ),

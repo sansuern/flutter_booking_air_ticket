@@ -1,13 +1,17 @@
+import 'package:basicflutter/bloc/cart_bloc.dart';
 import 'package:basicflutter/services/webapi_service.dart';
 import 'package:basicflutter/utils/info_list.dart';
 import 'package:basicflutter/widgets/double_text_widget.dart';
 import 'package:basicflutter/widgets/hotels_card.dart';
 import 'package:basicflutter/widgets/ticket_card.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import '../styles/style.dart';
+import '../models/user.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -110,23 +114,73 @@ class _HomeState extends State<Home> {
         const Gap(15),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: const Column(
+          child: Column(
             children: [
-              DoubleTextWidget(bigText: "Hotels", smallText: "View all"),
+              DoubleTextWidget(bigText: "Hotels ", smallText: "View all"),
             ],
           ),
         ),
         const Gap(15),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.only(left: 16),
-          child: Row(
-            children: hotelList
-                .map((singleHotel) => HotelCard(hotel: singleHotel))
-                .toList(),
-          ),
+        StreamBuilder<QuerySnapshot>(
+          stream:
+              FirebaseFirestore.instance.collection("card_tickets").snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            //* hotels
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.only(left: 16),
+              child: Row(
+                children: snapshot.data!.docs.map((hotel) {
+                  return HotelCard(hotel: hotel);
+                }).toList(),
+              ),
+            );
+          },
         ),
         const Gap(45),
+
+        Text("In your cart"),
+
+        BlocBuilder<CartBloc, CartState>(
+          builder: (context, state) {
+            return Container(
+              height: 400,
+              width: 200,
+              child: ListView.builder(
+                itemCount: state.cart.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(state.cart[index].image),
+                          Text(state.cart[index].place),
+                          Text(state.cart[index].destination),
+                          Text(
+                            state.cart[index].price.toString(),
+                          ),
+                          ElevatedButton(
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Styles.bgPrimary),
+                              onPressed: () => context.read<CartBloc>().add(
+                                    CartRemove(index),
+                                  ),
+                              child: Text("Remove"))
+                        ]),
+                  );
+                },
+              ),
+            );
+          },
+        )
+
+        // ListView.builder(itemBuilder: itemBuilder)
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:basicflutter/bloc/switch_menu_bloc.dart';
 import 'package:basicflutter/styles/style.dart';
+import 'package:basicflutter/views/cart_page.dart';
 import 'package:basicflutter/views/home.dart';
 import 'package:basicflutter/views/profile.dart';
 import 'package:basicflutter/views/search.dart';
@@ -39,15 +40,20 @@ class _IndexState extends State<Index> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: InkWell(
-                onTap: () {
-                  Navigator.pushReplacementNamed(
-                    navigatorState.currentContext!,
-                    AppRoutes.test,
-                  );
-                },
-                child: Text("test")),
-          ),
+              title: Row(
+                children: [
+                  const Expanded(child: Text("")),
+                  InkWell(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CartPage(),
+                        )),
+                    child: const Icon(Icons.shopping_cart),
+                  )
+                ],
+              ),
+              backgroundColor: Styles.bgPrimary),
           backgroundColor: Styles.bgColor,
           body: Container(child: _widgetOptions[state.selectedIndex]),
           bottomNavigationBar: BottomBar(state.selectedIndex),

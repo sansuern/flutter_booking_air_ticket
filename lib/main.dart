@@ -1,3 +1,4 @@
+import 'package:basicflutter/bloc/cart_bloc.dart';
 import 'package:basicflutter/bloc/global_observer.dart';
 import 'package:basicflutter/provider/auth_provider.dart';
 import 'package:basicflutter/routes/routes.dart';
@@ -41,9 +42,10 @@ class Myapp extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginBloc = BlocProvider(create: (context) => LoginBloc());
     final switchBloc = BlocProvider(create: (context) => SwitchMenuBloc());
+    final cartBloc = BlocProvider(create: (context) => CartBloc());
 
     return MultiBlocProvider(
-      providers: [loginBloc, switchBloc],
+      providers: [loginBloc, switchBloc, cartBloc],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "Flutter",

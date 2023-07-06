@@ -1,4 +1,5 @@
 import 'package:basicflutter/views/home.dart';
+import 'package:basicflutter/views/index.dart';
 import 'package:basicflutter/views/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +15,9 @@ class AuthPage extends StatelessWidget {
         builder: (context, snapshot) {
           //user is logged in
           if (snapshot.hasData) {
-            return Home();
+            return const Index();
           } else {
-            return LoginPage();
+            return const LoginPage();
           }
           //user is not logged in
         },
