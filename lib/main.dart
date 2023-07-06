@@ -4,14 +4,15 @@ import 'package:basicflutter/routes/routes.dart';
 import 'package:basicflutter/styles/style.dart';
 import 'package:basicflutter/views/auth_page.dart';
 import 'package:basicflutter/views/index.dart';
+import 'package:basicflutter/views/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'bloc/login_bloc.dart';
 import 'bloc/switch_menu_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'views/login.dart';
 
 final navigatorState = GlobalKey<NavigatorState>();
 
@@ -20,6 +21,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   // ignore: deprecated_member_use
   runApp(const Myapp());
 

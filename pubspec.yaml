@@ -50,7 +50,8 @@ dependencies:
   firebase_auth: ^4.6.3
   google_sign_in: ^6.1.4
   flutter_login_facebook: ^1.8.0
-  
+  country_picker: ^2.0.20
+  pinput: ^2.2.31
 
 dev_dependencies:
   flutter_test:

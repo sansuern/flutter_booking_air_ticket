@@ -2,7 +2,7 @@ import 'package:basicflutter/bloc/home_bloc.dart';
 import 'package:basicflutter/models/auth.dart';
 import 'package:basicflutter/models/user.dart';
 import 'package:basicflutter/routes/routes.dart';
-import 'package:basicflutter/services/auth.dart';
+import 'package:basicflutter/styles/style.dart';
 import 'package:basicflutter/utils/layout.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +14,7 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../bloc/login_bloc.dart';
+import '../services/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -41,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
     return Center(
       child: Container(
         width: AppLayout.getWidth(500),
-        height: AppLayout.getHeight(600),
+        height: AppLayout.getHeight(700),
         decoration: const BoxDecoration(
           // ignore: prefer_const_constructors
           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -80,26 +81,75 @@ class _LoginPageState extends State<LoginPage> {
                             child: Text("Sign In"),
                           ),
                           const SizedBox(height: 20),
-                          const Text("or continue with"),
-                          const SizedBox(height: 20),
                           ElevatedButton(
-                            onPressed: () => AuthService().signinWithGoogle(),
-                            style: TextButton.styleFrom(
-                                minimumSize: const Size(500, 50),
-                                backgroundColor:
-                                    Color.fromRGBO(94, 114, 228, 1)),
-                            child: Text("Google"),
-                          ),
-                          const SizedBox(height: 10),
-                          ElevatedButton(
-                            onPressed: _handleClickLogin,
+                            onPressed: _handleClickSignin,
                             style: TextButton.styleFrom(
                                 primary: Colors.white,
                                 minimumSize: Size(500, 50),
                                 backgroundColor:
                                     Color.fromRGBO(94, 114, 228, 1)),
-                            child: Text("Facebook"),
+                            child: Text("Sign Up"),
                           ),
+                          const SizedBox(height: 20),
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom:
+                                          BorderSide(color: Styles.textColor)),
+                                ),
+                              )),
+                              Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Text("or continue with"),
+                              ),
+                              Expanded(
+                                  child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom:
+                                          BorderSide(color: Styles.textColor)),
+                                ),
+                              )),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () => AuthService().signinWithGoogle(),
+                            style: TextButton.styleFrom(
+                                minimumSize: const Size(500, 50),
+                                backgroundColor: Colors.white),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset("assets/images/google.png",
+                                    width: 25),
+                                Gap(10),
+                                Center(
+                                  child: Text(
+                                    "Google",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+
+                          //invalid login with facebook
+                          // ElevatedButton(
+                          //   onPressed: _handleClickLogin,
+                          //   style: TextButton.styleFrom(
+                          //       primary: Colors.white,
+                          //       minimumSize: Size(500, 50),
+                          //       backgroundColor:
+                          //           Color.fromRGBO(94, 114, 228, 1)),
+                          //   child: Text("Facebook"),
+
+                          // ),
                         ],
                       );
                     },
@@ -150,48 +200,31 @@ class _LoginPageState extends State<LoginPage> {
         },
       );
 
-      try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-        Navigator.pop(context);
-      } on FirebaseAuthException catch (error) {
-        if (error.code == "wrong-password") {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return const AlertDialog(
-                title: Text("Wrong password"),
-              );
-            },
-          );
-        } else if (error.code == "user-not-found") {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text("User not found: $email"),
-              );
-            },
-          );
-        } else {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text("Invalid Email: $email"),
-              );
-            },
-          );
-        }
-      }
+      AuthService()
+          .signinWithEmail(context: context, email: email, password: password);
 
       // final user = User(
       //     username: _emailController.text,
       //     password: _passwordController.text);
       // context.read<LoginBloc>().add(LoginEventSignin(user));
       // formKey.currentState?.reset();
+    }
+  }
+
+  void _handleClickSignin() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    if (formKey.currentState!.validate()) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+      AuthService().signupWithEmailAndPassword(
+          context: context, email: email, password: password);
     }
   }
 }
