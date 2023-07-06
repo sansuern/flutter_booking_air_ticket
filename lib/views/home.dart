@@ -148,34 +148,43 @@ class _HomeState extends State<Home> {
 
         BlocBuilder<CartBloc, CartState>(
           builder: (context, state) {
-            return Container(
-              height: 400,
-              width: 200,
-              child: ListView.builder(
-                itemCount: state.cart.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.symmetric(vertical: 20),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(state.cart[index].image),
-                          Text(state.cart[index].place),
-                          Text(state.cart[index].destination),
-                          Text(
-                            state.cart[index].price.toString(),
-                          ),
-                          ElevatedButton(
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Styles.bgPrimary),
-                              onPressed: () => context.read<CartBloc>().add(
-                                    CartRemove(index),
-                                  ),
-                              child: Text("Remove"))
-                        ]),
-                  );
-                },
-              ),
+            return Column(
+              children: [
+                Text(state.cartIsLoading.toString()),
+                Container(
+                  height: 400,
+                  width: 200,
+                  child: ListView.builder(
+                    itemCount: state.cart.length,
+                    itemBuilder: (context, index) {
+                      if (state.cartIsLoading) {
+                        return Text("Loading...");
+                      }
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 20),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(state.cartIsLoading.toString()),
+                              Text(state.cart[index].image),
+                              Text(state.cart[index].place),
+                              Text(state.cart[index].destination),
+                              Text(
+                                state.cart[index].price.toString(),
+                              ),
+                              ElevatedButton(
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Styles.bgPrimary),
+                                  onPressed: () => context.read<CartBloc>().add(
+                                        CartRemove(state.cart[index].id),
+                                      ),
+                                  child: Text("Remove"))
+                            ]),
+                      );
+                    },
+                  ),
+                ),
+              ],
             );
           },
         )
