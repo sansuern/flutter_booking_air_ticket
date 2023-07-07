@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../config.dart';
 import '../models/cart.dart';
 import '../models/user.dart';
 
@@ -16,27 +17,27 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<CartEdit>(_cartEdit);
   }
 
-  FutureOr<void> _cartAdd(CartAdd event, Emitter<CartState> emit) async {
-    emit(state.copyWith(cartIsLoading: true));
+  void _cartAdd(CartAdd event, Emitter<CartState> emit) {
+    emit(state.copyWith(cartIsLoading: Configs.stateChange['IsLoading']));
     final addCart = List<CartModel>.from(state.cart)..add(event.booking);
     emit(state.copyWith(cart: addCart));
-    emit(state.copyWith(cartIsLoading: false));
+    emit(state.copyWith(cartIsLoading: Configs.stateChange['IsLoaded']));
   }
 
-  FutureOr<void> _cartRemove(CartRemove event, Emitter<CartState> emit) async {
-    emit(state.copyWith(cartIsLoading: true));
+  void _cartRemove(CartRemove event, Emitter<CartState> emit) {
+    emit(state.copyWith(cartIsLoading: Configs.stateChange['IsLoading']));
     final List<CartModel> newArray = state.cart;
     newArray.removeAt(event.index);
-    // state.cart.removeAt(event.index);
     emit(state.copyWith(cart: newArray));
-    emit(state.copyWith(cartIsLoading: false));
+    emit(state.copyWith(cartIsLoading: Configs.stateChange['IsLoaded']));
   }
 
-  FutureOr<void> _cartEdit(CartEdit event, Emitter<CartState> emit) async {
-    emit(state.copyWith(cartIsLoading: true));
+  void _cartEdit(CartEdit event, Emitter<CartState> emit) {
+    emit(state.copyWith(cartIsLoading: Configs.stateChange['IsLoading']));
     final List<CartModel> newArray = state.cart;
+    //assign new value
     newArray[event.index].place = "newValue555";
     emit(state.copyWith(cart: newArray));
-    emit(state.copyWith(cartIsLoading: false));
+    emit(state.copyWith(cartIsLoading: Configs.stateChange['IsLoaded']));
   }
 }

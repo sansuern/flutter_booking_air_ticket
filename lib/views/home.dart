@@ -1,4 +1,5 @@
 import 'package:basicflutter/bloc/cart_bloc.dart';
+import 'package:basicflutter/config.dart';
 import 'package:basicflutter/services/webapi_service.dart';
 import 'package:basicflutter/utils/info_list.dart';
 import 'package:basicflutter/widgets/double_text_widget.dart';
@@ -145,7 +146,6 @@ class _HomeState extends State<Home> {
         const Gap(45),
 
         Text("In your cart"),
-
         BlocBuilder<CartBloc, CartState>(
           builder: (context, state) {
             return Column(
