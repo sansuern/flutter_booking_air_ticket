@@ -1,5 +1,5 @@
 class Configs {
-  static Map<String, dynamic> stateChange = {
+  static Map<String, bool> stateChange = {
     "IsLoading": true,
     "IsLoaded": false,
   };

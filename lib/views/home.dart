@@ -115,7 +115,7 @@ class _HomeState extends State<Home> {
         const Gap(15),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
+          child: const Column(
             children: [
               DoubleTextWidget(bigText: "Hotels ", smallText: "View all"),
             ],
@@ -127,7 +127,7 @@ class _HomeState extends State<Home> {
               FirebaseFirestore.instance.collection("card_tickets").snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
@@ -145,61 +145,34 @@ class _HomeState extends State<Home> {
         ),
         const Gap(45),
 
-        Text("In your cart"),
+        const Text("In your cart"),
         BlocBuilder<CartBloc, CartState>(
           builder: (context, state) {
             return Column(
               children: [
-                Container(
-                  height: 400,
-                  width: 200,
-                  child: ListView.builder(
-                    itemCount: state.cart.length,
-                    itemBuilder: (context, index) {
-                      if (state.cartIsLoading) {
-                        return Text("Loading...");
-                      }
-                      return Container(
-                        margin: EdgeInsets.symmetric(vertical: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(state.cart[index].image),
-                            Text(state.cart[index].place),
-                            Text(state.cart[index].destination),
-                            Text(
-                              state.cart[index].price.toString(),
-                            ),
-                            Row(
-                              children: [
-                                ElevatedButton(
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Styles.bgPrimary),
-                                  onPressed: () => context.read<CartBloc>().add(
-                                        CartEdit(state.cart
-                                            .indexOf(state.cart[index])),
-                                      ),
-                                  child: Text("Edit"),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                ElevatedButton(
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Styles.orangeColor),
-                                  onPressed: () => context.read<CartBloc>().add(
-                                        CartRemove(state.cart
-                                            .indexOf(state.cart[index])),
-                                      ),
-                                  child: Text("Remove"),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: state.cart.length,
+                  itemBuilder: (context, index) {
+                    if (state.cartIsLoading) {
+                      return const Text("Loading...");
+                    }
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(state.cart[index].image),
+                          Text(state.cart[index].place),
+                          Text(state.cart[index].destination),
+                          Text(
+                            state.cart[index].price.toString(),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ],
             );
