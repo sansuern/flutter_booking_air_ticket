@@ -21,18 +21,22 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     final addCart = List<CartModel>.from(state.cart)..add(event.booking);
     emit(state.copyWith(cart: addCart));
     emit(state.copyWith(cartIsLoading: false));
-
-    // emit(CartState(cart: addCart));
   }
 
   FutureOr<void> _cartRemove(CartRemove event, Emitter<CartState> emit) async {
     emit(state.copyWith(cartIsLoading: true));
-    state.cart.removeWhere((item) {
-      return item.id == event.index;
-    });
-    emit(state.copyWith(cart: state.cart));
+    final List<CartModel> newArray = state.cart;
+    newArray.removeAt(event.index);
+    // state.cart.removeAt(event.index);
+    emit(state.copyWith(cart: newArray));
     emit(state.copyWith(cartIsLoading: false));
   }
 
-  FutureOr<void> _cartEdit(CartEdit event, Emitter<CartState> emit) async {}
+  FutureOr<void> _cartEdit(CartEdit event, Emitter<CartState> emit) async {
+    emit(state.copyWith(cartIsLoading: true));
+    final List<CartModel> newArray = state.cart;
+    newArray[event.index].place = "newValue555";
+    emit(state.copyWith(cart: newArray));
+    emit(state.copyWith(cartIsLoading: false));
+  }
 }

@@ -150,7 +150,6 @@ class _HomeState extends State<Home> {
           builder: (context, state) {
             return Column(
               children: [
-                Text(state.cartIsLoading.toString()),
                 Container(
                   height: 400,
                   width: 200,
@@ -163,23 +162,41 @@ class _HomeState extends State<Home> {
                       return Container(
                         margin: EdgeInsets.symmetric(vertical: 20),
                         child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(state.cartIsLoading.toString()),
-                              Text(state.cart[index].image),
-                              Text(state.cart[index].place),
-                              Text(state.cart[index].destination),
-                              Text(
-                                state.cart[index].price.toString(),
-                              ),
-                              ElevatedButton(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(state.cart[index].image),
+                            Text(state.cart[index].place),
+                            Text(state.cart[index].destination),
+                            Text(
+                              state.cart[index].price.toString(),
+                            ),
+                            Row(
+                              children: [
+                                ElevatedButton(
                                   style: TextButton.styleFrom(
                                       backgroundColor: Styles.bgPrimary),
                                   onPressed: () => context.read<CartBloc>().add(
-                                        CartRemove(state.cart[index].id),
+                                        CartEdit(state.cart
+                                            .indexOf(state.cart[index])),
                                       ),
-                                  child: Text("Remove"))
-                            ]),
+                                  child: Text("Edit"),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                ElevatedButton(
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Styles.orangeColor),
+                                  onPressed: () => context.read<CartBloc>().add(
+                                        CartRemove(state.cart
+                                            .indexOf(state.cart[index])),
+                                      ),
+                                  child: Text("Remove"),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       );
                     },
                   ),

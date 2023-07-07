@@ -21,4 +21,10 @@ class CartRemove extends CartEvent {
   List<Object> get props => [index];
 }
 
-class CartEdit extends CartEvent {}
+class CartEdit extends CartEvent {
+  final int index;
+  CartEdit(this.index);
+
+  @override
+  List<Object> get props => [index];
+}

@@ -10,7 +10,6 @@ import '../models/user.dart';
 
 class HotelCard extends StatelessWidget {
   final hotel;
-
   const HotelCard({Key? key, required this.hotel}) : super(key: key);
 
   @override
@@ -65,20 +64,21 @@ class HotelCard extends StatelessWidget {
           Row(
             children: [
               ElevatedButton(
-                  style:
-                      TextButton.styleFrom(backgroundColor: Styles.orangeColor),
-                  onPressed: () => context.read<CartBloc>().add(
-                        CartAdd(
-                          CartModel(
-                            id: hotel['id'],
-                            image: hotel['image'],
-                            destination: hotel['destination'],
-                            place: hotel['place'],
-                            price: hotel['price'],
-                          ),
+                style:
+                    TextButton.styleFrom(backgroundColor: Styles.orangeColor),
+                onPressed: () => context.read<CartBloc>().add(
+                      CartAdd(
+                        CartModel(
+                          id: hotel['id'],
+                          image: hotel['image'],
+                          destination: hotel['destination'],
+                          place: hotel['place'],
+                          price: hotel['price'],
                         ),
                       ),
-                  child: const Text("Booking"))
+                    ),
+                child: const Text("Booking"),
+              ),
             ],
           ),
         ],
